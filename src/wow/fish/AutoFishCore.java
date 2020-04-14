@@ -1,7 +1,11 @@
 package wow.fish;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 
+import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -11,15 +15,16 @@ import javax.sound.sampled.TargetDataLine;
  * 桌面程序，窗口启动
  * 开始后最小化至任务栏
  * 监听鼠标右键点击后，退出程序
+ * 
+ * 1.监听声音拉杆，
+ * 2.同时截图扫描扫描指定区域浮漂位置范围
  * @author Administrator
  *
  */
 public class AutoFishCore {
 	
-	private FishHandler fishHandler;
-	public AutoFishCore(){
-		this.fishHandler = new FishHandler();
-	}
+	ByteArrayInputStream bais = null;
+	ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	
 	AudioFormat audioFormat;
 	TargetDataLine targetDataLine;
@@ -69,30 +74,52 @@ public class AutoFishCore {
 			try {
 				targetDataLine.open(audioFormat); //打开输入设备
 				targetDataLine.start(); //开始录音
+				
 				byte[] fragment = new byte[1024];
 
-				ais = new AudioInputStream(targetDataLine);
+				
 				System.out.println("start...");
 				System.out.println();
 				while (flag) {
+					//仿人工，等待（缓冲），准备放杆
+					Thread.sleep(500);
+					//放杆
+					//fishHandler.pushRod();
+					System.out.println("放杆");
+					//截屏扫描 获取浮漂位置，保存截图记录
 
-					targetDataLine.read(fragment, 0, fragment.length);
-					//当数组末位大于weight时开始存储字节（有声音传入），一旦开始不再需要判断末位
-					if (Math.abs(fragment[fragment.length-1]) > weight ) {
-						downSum++;
-						//点击收杆 并防止多次点击
-						System.out.println("声音录入...点击 第 "+downSum+" 次");
-						System.out.println("首位："+fragment[0]+",末位："+fragment[fragment.length-1]+",lenght"+fragment.length);
-						System.out.println();
-						//放杆 并等待1秒
-						Thread.sleep(1500);
-						//判断鼠标右键被按下时 结束循环
-						if(downSum == 3){
-							break;
-						}
+					//等待0.5秒，放杆初期不会有声音
+					Thread.sleep(500);
+					//等待声音结束，防止上次余音的存在
+					Thread.sleep(500);
+					
+					//循环判断是否有声音产生
+					do{
+						//循环10秒以上则跳出
+						//将麦克风声音数据，存入数组fragment
+						targetDataLine.read(fragment, 0, fragment.length);
+					}while
+						//当数组末位大于weight时开始存储字节（有声音传入），一旦开始不再需要判断末位
+						//当 没有声音时，继续循环监听麦克风
+						(Math.abs(fragment[fragment.length-1]) < weight);
+					
+					//声音传入
+					//仿人工，等待（突然有声音，反应时间）
+					Thread.sleep(500);
+					downSum++;
+					//点击收杆 
+					//fishHandler.pullRod(0, 0);
+					System.out.println("收杆");
+					System.out.println("声音录入...点击 第 "+downSum+" 次");
+					System.out.println("首位："+fragment[0]+",末位："+fragment[fragment.length-1]+",lenght"+fragment.length);
+					System.out.println();
+					
+					
+					//结束条件，判断鼠标右键被按下时 结束循环
+					if(downSum == 3){
+						break;
 					}
 				}
-
 
 			stopRecognize();
 			} catch (Exception e) {

@@ -1,4 +1,4 @@
-package test.image;
+package demo.image.RGP;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -6,25 +6,21 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 /**
-å›¾åƒå–åç›¸å½“äºå–åº•ç‰‡ï¼Œå¯¹äºæ¯ä¸ªåƒç´ ç‚¹çš„RGBæ¥è®²ï¼Œå°±æ˜¯: 
-Râ€²=255âˆ’R
-Râ€²=255âˆ’R
-Gâ€²=255âˆ’G
-Gâ€²=255âˆ’G
-Bâ€²=255âˆ’B
-Bâ€²=255âˆ’B
-ç”¨Râ€™ï¼ŒGâ€™ï¼ŒBâ€™æ¥æ›¿æ¢Rï¼ŒGï¼ŒBã€‚
+ * »Ò¶ÈÍ¼Ö±¹ÛµØ½²¾ÍÊÇ½«Ô­À´µÄRGBÍ¼Ïñ×ª»»ÎªÖ»ÓĞ»Ò¶È¼¶µÄÍ¼Ïñ£¬×öÕâÒ»²½´¦ÀíÒ²±È½Ï¼òµ¥£¬
+ * Ö»Òª°ÑÃ¿¸öÏñËØµãµÄRGBÖµÄÃ³öÀ´£¬ËãÒ»ÏÂËûÃÇµÄÆ½¾ùÖµ(R+G+B)/3(R+G+B)/3£¬
+ * È»ºóÔÙÌæ»»Ô­À´µÄRGBÖµ¾ÍOKÁË¡£
+ * https://blog.csdn.net/sinat_36246371/article/details/72823349
  * @author King
  *
  */
-public class ImageNegative {
+public class ImageGrayscale {
 	public static void main(String args[]) throws IOException {
         BufferedImage image = null;
-        File f = null;
+        File file = null;
 
         try {
-            f = new File("C:\\Users\\King\\Desktop\\test.png");
-            image = ImageIO.read(f);
+            file = new File("C:/Users/King/Desktop/1.png");
+            image = ImageIO.read(file);
 
             int width = image.getWidth();
             int height = image.getHeight();
@@ -32,24 +28,26 @@ public class ImageNegative {
             for (int j = 0; j < height; j++) {
                 for (int i = 0; i < width; i++) {
                     int p = image.getRGB(i, j);
+
                     int a = (p >> 24) & 0xff;
                     int r = (p >> 16) & 0xff;
                     int g = (p >> 8) & 0xff;
                     int b = p & 0xff;
-                    System.out.println("a===="+a);
-                    r = 255 - r;
-                    g = 255 - g;
-                    b = 255 - b;
 
-                    p = (a << 24) | (r << 16) | (g << 8) | b;
+                    int avg = (r + g + b) / 3;
+
+                    p = (a << 24) | (avg << 16) | (avg << 8) | avg;
+
                     image.setRGB(i, j, p);
                 }
             }
-            System.out.println("å®Œæˆ");
-            f = new File("C:\\Users\\King\\Desktop\\Out2.jpg");
-            ImageIO.write(image, "jpg", f);
+
+
+            file = new File("C:/Users/King/Desktop/2.png");
+            ImageIO.write(image, "jpg", file);
+            System.out.println("Íê³É");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
     }
 }

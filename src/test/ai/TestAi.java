@@ -12,6 +12,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 
 import sun.misc.BASE64Encoder;
+import utils.KeyMap;
 
 public class TestAi {
 	public static void main(String[] args) {
@@ -20,12 +21,12 @@ public class TestAi {
 //		String clientId = "qjfnY6XcHdgje5lDLKW2mSoU";
 //      String clientSecret = "TDsFFscEh89N7c39uYMVqsxBPgWy9XGM";
         //文字识别
-        String clientId = "RMGSkRhPZVdS67XPmyXFM3pl";	// API Key
+        String clientId = KeyMap.APIKey.getDesc();	// API Key
         String clientSecret = "G2pFTWiYMXx3LXwnRHWukHzoZrgZ05n7";	// Secret Key
 		String token = AuthService.getAuth(clientId,clientSecret);
-		System.out.println(token);
-		String filePath ="C:/Users/King/Desktop/115.png";
-//		t.testPhoto(token,filePath);
+		System.out.println(token);//C:\Users\Administrator\Desktop
+		String filePath ="C:/Users/Administrator/Desktop/1.jpg";
+		t.testPhoto(token,"",filePath);
 	}
 
 	public String testPhoto(String token, String url, String filePath) {
@@ -34,7 +35,7 @@ public class TestAi {
 //        String url = "https://aip.baidubce.com/rest/2.0/image-classify/v2/advanced_general"; //通用物体和场景识别高级版
 //        String url = "https://aip.baidubce.com/rest/2.0/image-classify/v1/object_detect"; //图像主体检测(长宽高)
 //        String url = "https://aip.baidubce.com/rest/2.0/image-classify/v2/logo"; //图像主体检测(长宽高)
-//        String url = "https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic"; //文字识别
+		  url = "https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic"; //文字识别
 //        String url = "https://aip.baidubce.com/rest/2.0/ocr/v1/accurate_basic"; //文字识别(高精度版)
 //        String url = "https://aip.baidubce.com/rest/2.0/ocr/v1/general"; //文字识别(高精度版)
         

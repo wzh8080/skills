@@ -12,7 +12,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Screenshots {
+public class ImageHandler {
 	
 	private String fileName; // 文件的前缀
 	private int serialNum = 0;
@@ -20,11 +20,11 @@ public class Screenshots {
 	private String defaultImageFormat = "png";// 图像文件的默认格式
 	Dimension d = Toolkit.getDefaultToolkit().getScreenSize(); //
 	
-	public Screenshots() {
+	public ImageHandler() {
 		fileName = "C:/Users/King/Desktop/";
 		imageFormat = defaultImageFormat;
 	}
-	public Screenshots(String s, String format) {
+	public ImageHandler(String s, String format) {
 		fileName = s;
 		imageFormat = format;
 	}

@@ -1,4 +1,4 @@
-package test.image;
+package demo.image.RGP;
 
 import java.awt.AWTException;
 import java.awt.Robot;
